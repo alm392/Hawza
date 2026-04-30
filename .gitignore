@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# environment variables — never commit these
+.env
+.env.local
+.env*.local
+
+# local enrollment data — keep off git
+data/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
