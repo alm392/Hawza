@@ -25,10 +25,11 @@ export default function Footer() {
             <div className="footer-arabic">إدارة جعفرية</div>
             <h3>Idarah-e-Jafaria</h3>
             <p>
-              Momineen E Karen Rd<br />
+              Idarah E Jafaria<br />
               Tarneit, Melbourne, VIC<br />
               Australia
             </p>
+            <a href="mailto:idarahejafariaofmarjaiyah@gmail.com" className="footer-email">idarahejafariaofmarjaiyah@gmail.com</a>
             <div className="footer-dua">Iltemas-e-Dua</div>
           </div>
           <div className="footer-links">
