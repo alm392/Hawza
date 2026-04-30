@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers';
 import { createHash } from 'crypto';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { neon } from '@neondatabase/serverless';
 import LoginForm from '@/components/LoginForm';
 import AdminDashboard from '@/components/AdminDashboard';
 
@@ -17,25 +16,39 @@ function isAuthenticated() {
   return token === makeToken();
 }
 
-function getEnrollments() {
-  const file = join(process.cwd(), 'data', 'enrollments.json');
-  if (!existsSync(file)) return [];
+async function getEnrollments() {
   try {
-    return JSON.parse(readFileSync(file, 'utf-8'));
-  } catch {
+    const sql = neon(process.env.DATABASE_URL);
+    await sql`
+      CREATE TABLE IF NOT EXISTS enrollments (
+        id        SERIAL PRIMARY KEY,
+        timestamp TIMESTAMPTZ DEFAULT NOW(),
+        first_name TEXT,
+        last_name  TEXT,
+        email      TEXT,
+        phone      TEXT,
+        age        TEXT,
+        gender     TEXT,
+        message    TEXT
+      )
+    `;
+    const rows = await sql`SELECT * FROM enrollments ORDER BY timestamp ASC`;
+    return rows;
+  } catch (err) {
+    console.error('DB read error:', err);
     return [];
   }
 }
 
 export const metadata = { title: 'Admin | Idarah-e-Jafaria' };
 
-export default function AdminPage() {
+export default async function AdminPage() {
   const auth = isAuthenticated();
 
   return (
     <div className="admin-page">
       {auth ? (
-        <AdminDashboard enrollments={getEnrollments()} />
+        <AdminDashboard enrollments={await getEnrollments()} />
       ) : (
         <LoginForm />
       )}

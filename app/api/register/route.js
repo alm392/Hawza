@@ -1,39 +1,36 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { neon } from '@neondatabase/serverless';
 
-const DATA_DIR  = join(process.cwd(), 'data');
-const DATA_FILE = join(DATA_DIR, 'enrollments.json');
+const sql = neon(process.env.DATABASE_URL);
 
-function readEnrollments() {
-  if (!existsSync(DATA_FILE)) return [];
-  return JSON.parse(readFileSync(DATA_FILE, 'utf-8'));
+async function ensureTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS enrollments (
+      id        SERIAL PRIMARY KEY,
+      timestamp TIMESTAMPTZ DEFAULT NOW(),
+      first_name TEXT,
+      last_name  TEXT,
+      email      TEXT,
+      phone      TEXT,
+      age        TEXT,
+      gender     TEXT,
+      message    TEXT
+    )
+  `;
 }
 
 export async function POST(request) {
   const body = await request.json();
-  const { first_name, last_name, email, phone, age, gender, programs, message } = body;
+  const { first_name, last_name, email, phone, age, gender, message } = body;
 
   try {
-    if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-
-    const enrollments = readEnrollments();
-    enrollments.push({
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      first_name:  first_name  || '',
-      last_name:   last_name   || '',
-      email:       email       || '',
-      phone:       phone       || '',
-      age:         age         || '',
-      gender:      gender      || '',
-      programs:    Array.isArray(programs) ? programs : [programs].filter(Boolean),
-      message:     message     || '',
-    });
-
-    writeFileSync(DATA_FILE, JSON.stringify(enrollments, null, 2));
+    await ensureTable();
+    await sql`
+      INSERT INTO enrollments (first_name, last_name, email, phone, age, gender, message)
+      VALUES (${first_name || ''}, ${last_name || ''}, ${email || ''}, ${phone || ''}, ${age || ''}, ${gender || ''}, ${message || ''})
+    `;
     return Response.json({ ok: true });
   } catch (err) {
-    console.error('Save error:', err);
+    console.error('DB error:', err);
     return Response.json({ ok: false }, { status: 500 });
   }
 }
