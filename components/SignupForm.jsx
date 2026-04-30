@@ -73,14 +73,14 @@ export default function SignupForm() {
         </div>
         <div className="form-group">
           <label htmlFor="phone">Phone Number *</label>
-          <input type="tel" id="phone" name="phone" required placeholder="04XX XXX XXX" />
+          <input type="tel" id="phone" name="phone" required />
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="age">Age *</label>
-          <input type="number" id="age" name="age" required min="5" max="80" placeholder="e.g. 24" />
+          <input type="number" id="age" name="age" required min="5" max="80" />
         </div>
         <div className="form-group">
           <label htmlFor="gender">Gender *</label>
