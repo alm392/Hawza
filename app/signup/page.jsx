@@ -39,8 +39,7 @@ export default function SignupPage() {
               <div className="form-info-bar">
                 <span>🗓</span>
                 <p style={{ margin: 0 }}>
-                  <strong>Classes commence the first week of May 2025</strong> at Karen Rd,
-                  Tarneit. All sessions are <strong>in-person</strong> with separate arrangements
+                  Classes are held at Karen Rd, Tarneit. All sessions are <strong>in-person</strong> with separate arrangements
                   for brothers and sisters.
                 </p>
               </div>

@@ -17,6 +17,10 @@ const faqs = [
     a: 'Yes. The Hawza is completely free of charge. Knowledge is a trust, and we believe no sincere seeker should face a financial barrier. That said, if you feel moved to contribute, donations are always welcome and go directly toward sustaining and growing this blessed initiative for the benefit of our entire community.',
   },
   {
+    q: 'When will the Hawza run?',
+    a: 'Classes will commence in the first week of May, beginning Friday the 5th of May. Sessions will be held across Friday, Saturday, and Sunday each week. Class times will be confirmed upon enrollment and tailored to best suit our students.',
+  },
+  {
     q: 'Is the Madarsa only for specific age groups?',
     a: 'Madarsa-e-Jafaria is designed for children aged 14 and under, offering primary-level religious education. The Hawza (Islamic Seminary) program is available for older students and adults seeking formal seminary-level study.',
   },
