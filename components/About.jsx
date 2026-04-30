@@ -39,7 +39,7 @@ export default function About() {
           <div className="about-grid">
             <div className="about-text">
               <p>
-                Idarah E Jafaria, <strong>Idarah-e-Jafaria</strong> is honoured to announce
+                <strong>Idarah-e-Jafaria</strong> is honoured to announce
                 the commencement of Islamic Markaz activities in <strong>Tarneit, Melbourne</strong>,
                 beginning the first week of May.
               </p>
