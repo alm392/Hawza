@@ -1,8 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
-const sql = neon(process.env.DATABASE_URL);
-
-async function ensureTable() {
+async function ensureTable(sql) {
   await sql`
     CREATE TABLE IF NOT EXISTS enrollments (
       id        SERIAL PRIMARY KEY,
@@ -23,7 +21,8 @@ export async function POST(request) {
   const { first_name, last_name, email, phone, age, gender, message } = body;
 
   try {
-    await ensureTable();
+    const sql = neon(process.env.DATABASE_URL);
+    await ensureTable(sql);
     await sql`
       INSERT INTO enrollments (first_name, last_name, email, phone, age, gender, message)
       VALUES (${first_name || ''}, ${last_name || ''}, ${email || ''}, ${phone || ''}, ${age || ''}, ${gender || ''}, ${message || ''})
