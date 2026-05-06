@@ -11,7 +11,14 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git remote *)",
-      "Bash(git branch *)"
+      "Bash(git branch *)",
+      "Bash(xxd)",
+      "Bash(python3 -c \"from PIL import Image; print\\('pillow ok'\\)\")",
+      "Bash(sips -c 506 506 /tmp/favicon_source.png --out /tmp/favicon_sq.png)",
+      "Bash(sips -z 512 512 /tmp/favicon_sq.png --out /tmp/icon_512.png)",
+      "Bash(sips -z 180 180 /tmp/favicon_sq.png --out /tmp/apple_icon_180.png)",
+      "Bash(cp /tmp/icon_512.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
+      "Bash(cp /tmp/apple_icon_180.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/apple-icon.png\")"
     ]
   }
 }
