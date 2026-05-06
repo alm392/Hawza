@@ -26,6 +26,7 @@ export default function Navbar({ alwaysScrolled = false }) {
         <ul className="nav-links">
           <li><a href={anchor('about')}>About</a></li>
           <li><a href={anchor('programs')}>Programs</a></li>
+          <li><a href={anchor('curriculum')}>Schedule</a></li>
           <li><a href={anchor('mentors')}>Mentors</a></li>
           <li><a href={anchor('contact')}>Contact</a></li>
           <li><a href={anchor('faq')}>FAQ</a></li>
