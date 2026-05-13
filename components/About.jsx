@@ -99,7 +99,7 @@ export default function About() {
                 </div>
                 <div className="ijaza-credit">
                   <span className="ijaza-name">His Eminence Grand Ayatollah Sheikh Shamsuddin Vaezi</span>
-                  <span className="ijaza-role">Marja&apos; — Najaf al-Ashraf</span>
+                  <span className="ijaza-role">Marja al-Deeni — Najaf al-Ashraf</span>
                 </div>
               </div>
               <div className="ijaza-item">
