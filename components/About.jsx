@@ -115,7 +115,7 @@ export default function About() {
                 </div>
                 <div className="ijaza-credit">
                   <span className="ijaza-name">His Eminence Ayatollah Sayed Fazil Musawi Jabri</span>
-                  <span className="ijaza-role">Head of Hawza Ilmiya, Najaf al-Ashraf — Madarsa Imam Hussain (a.s)</span>
+                  <span className="ijaza-role">Hawza of Najaf Ashraf</span>
                 </div>
               </div>
             </div>
