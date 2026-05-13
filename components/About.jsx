@@ -78,22 +78,46 @@ export default function About() {
           <div className="ijaza-section">
             <div className="ijaza-header">
               <div className="section-tag" style={{ margin: '0 auto 0.75rem' }}>Official Accreditation</div>
-              <h3>Letter of Authorization from Najaf al-Ashraf</h3>
+              <h3>Letters of Authorization from Najaf al-Ashraf</h3>
               <p className="ijaza-subtitle">
-                We are honoured to share the official letter of blessing and authorization
-                issued by a distinguished Hawza in Najaf al-Ashraf, formally endorsing the
+                We are honoured to share the official letters of blessing and authorization
+                issued by distinguished scholars of Najaf al-Ashraf, formally endorsing the
                 establishment of our Islamic seminary in Melbourne, Victoria.
               </p>
             </div>
-            <div className="ijaza-frame">
-              <Image
-                src="/ijaza-najaf.jpeg"
-                alt="Official letter of authorization from the Hawza of Najaf al-Ashraf blessing the establishment of Idarah-e-Jafaria Melbourne"
-                width={600}
-                height={800}
-                className="ijaza-img"
-                style={{ width: '100%', height: 'auto', maxWidth: '520px' }}
-              />
+            <div className="ijaza-grid">
+              <div className="ijaza-item">
+                <div className="ijaza-frame">
+                  <Image
+                    src="/ijaza-najaf.jpeg"
+                    alt="Official letter of authorization from Grand Ayatollah Sheikh Shamsuddin Vaezi"
+                    width={600}
+                    height={800}
+                    className="ijaza-img"
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                </div>
+                <div className="ijaza-credit">
+                  <span className="ijaza-name">His Eminence Grand Ayatollah Sheikh Shamsuddin Vaezi</span>
+                  <span className="ijaza-role">Marja&apos; — Najaf al-Ashraf</span>
+                </div>
+              </div>
+              <div className="ijaza-item">
+                <div className="ijaza-frame">
+                  <Image
+                    src="/ijaza-jabri.jpg"
+                    alt="Official letter of authorization from Ayatollah Sayed Fazil Musawi Jabri"
+                    width={600}
+                    height={800}
+                    className="ijaza-img"
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                </div>
+                <div className="ijaza-credit">
+                  <span className="ijaza-name">His Eminence Ayatollah Sayed Fazil Musawi Jabri</span>
+                  <span className="ijaza-role">Head of Hawza Ilmiya, Najaf al-Ashraf — Madarsa Imam Hussain (a.s)</span>
+                </div>
+              </div>
             </div>
           </div>
         </FadeIn>
