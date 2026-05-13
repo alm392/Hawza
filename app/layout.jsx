@@ -24,9 +24,16 @@ const amiri = Amiri({
 });
 
 export const metadata = {
-  title: "Idarah-e-Jafaria | Melbourne's Najaf Al-Ashraf Accredited Hawza",
+  title: "Melbourne's Najaf Al Ashraf Accredited Hawza",
   description:
-    "Melbourne's first Najaf Al-Ashraf accredited Islamic seminary. In-person classes in Tarneit with qualified scholars. Enroll now.",
+    "Melbourne's Najaf Al-Ashraf accredited Islamic seminary. In-person classes in Tarneit with qualified scholars. Enroll now.",
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {

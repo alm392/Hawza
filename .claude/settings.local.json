@@ -18,7 +18,10 @@
       "Bash(sips -z 512 512 /tmp/favicon_sq.png --out /tmp/icon_512.png)",
       "Bash(sips -z 180 180 /tmp/favicon_sq.png --out /tmp/apple_icon_180.png)",
       "Bash(cp /tmp/icon_512.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
-      "Bash(cp /tmp/apple_icon_180.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/apple-icon.png\")"
+      "Bash(cp /tmp/apple_icon_180.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/apple-icon.png\")",
+      "Bash(identify \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
+      "Bash(sips -g pixelWidth -g pixelHeight \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
+      "Bash(node *)"
     ]
   }
 }
