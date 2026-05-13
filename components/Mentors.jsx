@@ -7,7 +7,7 @@ const mentors = [
     featured: false,
   },
   {
-    name: 'The Hawza of\nNajaf al-Ashraf',
+    name: 'A Hawza in\nNajaf Al-Ashraf',
     desc: "Under whose distinguished supervision and formal accreditation our Melbourne seminary operates — a testament to our program's authenticity, rigour, and deep roots in the classical tradition of Islamic scholarship.",
     featured: true,
     badge: 'Supervised by A Hawza in Najaf Ashraf',
