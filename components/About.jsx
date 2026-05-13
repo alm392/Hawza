@@ -105,7 +105,7 @@ export default function About() {
               <div className="ijaza-item">
                 <div className="ijaza-frame">
                   <Image
-                    src="/ijaza-jabri.jpg"
+                    src="/ijaza-jabri.png"
                     alt="Official letter of authorization from Ayatollah Sayed Fazil Musawi Jabri"
                     width={600}
                     height={800}
