@@ -7,8 +7,8 @@ const mentors = [
     featured: false,
   },
   {
-    name: 'Grand Ayatollah Sheikh\nShamsuddin Vaezi',
-    desc: "Under whose esteemed authority the Hawza of Najaf al-Ashraf confers full accreditation to our Melbourne seminary, a testament to our program's authenticity and academic rigour.",
+    name: 'The Hawza of\nNajaf al-Ashraf',
+    desc: "Under whose distinguished supervision and formal accreditation our Melbourne seminary operates — a testament to our program's authenticity, rigour, and deep roots in the classical tradition of Islamic scholarship.",
     featured: true,
     badge: 'Grand Supervisor',
   },

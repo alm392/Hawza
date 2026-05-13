@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import FadeIn from './FadeIn';
 
 const features = [
@@ -46,8 +47,8 @@ export default function About() {
               <p>
                 This initiative is dedicated to the spiritual and academic empowerment of our
                 community, under the direct guidance of our esteemed scholars. Our seminary is
-                fully accredited by the renowned <strong>Hawza of Najaf al-Ashraf</strong>, under
-                the supervision of Grand Ayatollah Sheikh Shamsuddin Vaezi, one of the most
+                fully accredited by the renowned <strong>Hawza of Najaf al-Ashraf</strong> —
+                under the supervision of a distinguished Hawza in Najaf Ashraf, one of the most
                 prestigious centres of Islamic learning in the world.
               </p>
               <p>
@@ -70,6 +71,29 @@ export default function About() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </FadeIn>
+        <FadeIn delay={200}>
+          <div className="ijaza-section">
+            <div className="ijaza-header">
+              <div className="section-tag" style={{ margin: '0 auto 0.75rem' }}>Official Accreditation</div>
+              <h3>Letter of Authorization from Najaf al-Ashraf</h3>
+              <p className="ijaza-subtitle">
+                We are honoured to share the official letter of blessing and authorization
+                issued by a distinguished Hawza in Najaf al-Ashraf, formally endorsing the
+                establishment of our Islamic seminary in Melbourne, Victoria.
+              </p>
+            </div>
+            <div className="ijaza-frame">
+              <Image
+                src="/ijaza-najaf.jpeg"
+                alt="Official letter of authorization from the Hawza of Najaf al-Ashraf blessing the establishment of Idarah-e-Jafaria Melbourne"
+                width={600}
+                height={800}
+                className="ijaza-img"
+                style={{ width: '100%', height: 'auto', maxWidth: '520px' }}
+              />
             </div>
           </div>
         </FadeIn>

@@ -6,7 +6,7 @@ import Link from 'next/link';
 const faqs = [
   {
     q: 'What is the Hawza and who can join?',
-    a: 'The Hawza is a traditional Islamic seminary offering formal religious education in the classical tradition. It is open to both brothers and sisters (with separate arrangements) of all adult ages. The program is fully accredited by the Hawza of Najaf al-Ashraf under Grand Ayatollah Sheikh Shamsuddin Vaezi.',
+    a: 'The Hawza is a traditional Islamic seminary offering formal religious education in the classical tradition. It is open to both brothers and sisters (with separate arrangements) of all adult ages. The program is fully accredited by and conducted under the supervision of a distinguished Hawza in Najaf al-Ashraf.',
   },
   {
     q: 'When does the program begin?',
@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     q: 'What accreditation does the Hawza hold?',
-    a: 'The Hawza is formally accredited and operates under the direct supervision of the Hawza of Najaf al-Ashraf, one of the oldest and most prestigious centres of Islamic scholarship in the world, under the esteemed authority of Grand Ayatollah Sheikh Shamsuddin Vaezi.',
+    a: 'The Hawza is formally accredited and operates under the direct supervision of a distinguished Hawza in Najaf al-Ashraf — one of the oldest and most prestigious centres of Islamic scholarship in the world.',
   },
   {
     q: 'Are daily prayers open to the general community?',

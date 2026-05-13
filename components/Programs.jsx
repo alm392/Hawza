@@ -5,7 +5,7 @@ const programs = [
     icon: '🎓',
     title: 'The Hawza',
     subtitle: 'Islamic Seminary',
-    desc: "Melbourne's premier religious education program, accredited and under the esteemed supervision of the Hawza of Najaf al-Ashraf (u/s Grand Ayatollah Sheikh Shamsuddin Vaezi). A structured seminary education rooted in the tradition of Najaf.",
+    desc: "Melbourne's premier religious education program, formally accredited and conducted under the esteemed supervision of a distinguished Hawza in Najaf al-Ashraf. A structured seminary education rooted in the classical tradition of Najaf.",
     tag: 'Brothers & Sisters (Separate)',
   },
   {
