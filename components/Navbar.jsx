@@ -31,6 +31,7 @@ export default function Navbar({ alwaysScrolled = false }) {
           <li><a href={anchor('contact')}>Contact</a></li>
           <li><a href={anchor('faq')}>FAQ</a></li>
           <li><Link href="/signup" className="nav-cta">Enroll Now</Link></li>
+          <li><Link href="/portal" className="nav-login">Log In</Link></li>
         </ul>
       </div>
     </nav>

@@ -21,7 +21,8 @@
       "Bash(cp /tmp/apple_icon_180.png \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/apple-icon.png\")",
       "Bash(identify \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
       "Bash(sips -g pixelWidth -g pixelHeight \"/Users/ayseral-mashat/Documents/Coding projects/Hawza/app/icon.png\")",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(npm run *)"
     ]
   }
 }

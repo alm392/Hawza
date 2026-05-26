@@ -1543,3 +1543,361 @@ input, select, textarea, button {
   color: white;
   transform: translateY(-1px);
 }
+
+/* ============ NAVBAR LOG IN ============ */
+.nav-login {
+  background: transparent !important;
+  color: var(--text-mid) !important;
+  border: 1.5px solid var(--beige-300) !important;
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-weight: 600 !important;
+  font-size: 0.86rem;
+  transition: all var(--transition) !important;
+  letter-spacing: 0.04em;
+}
+.navbar:not(.scrolled) .nav-login {
+  color: rgba(255,255,255,0.9) !important;
+  border-color: rgba(255,255,255,0.4) !important;
+}
+.nav-login::after { display: none !important; }
+.nav-login:hover {
+  background: var(--green-400) !important;
+  color: white !important;
+  border-color: var(--green-400) !important;
+  transform: translateY(-1px);
+}
+
+/* ============ ADMIN TABS ============ */
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--beige-200);
+  padding-bottom: 0;
+}
+.admin-tab {
+  padding: 10px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.02em;
+}
+.admin-tab:hover { color: var(--green-500); }
+.admin-tab.active {
+  color: var(--green-500);
+  border-bottom-color: var(--green-400);
+}
+
+/* ============ PORTAL MANAGER (admin side) ============ */
+.portal-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.portal-manager-section-title {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--beige-200);
+}
+.portal-upload-form {
+  background: white;
+  border: 1px solid var(--beige-200);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.portal-upload-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.portal-upload-row .admin-field { flex: 1; min-width: 120px; }
+.portal-upload-success {
+  color: var(--green-500);
+  font-size: 0.88rem;
+  background: var(--green-100);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+.portal-files-admin {
+  background: white;
+  border: 1px solid var(--beige-200);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+.portal-no-files {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.portal-group {
+  margin-bottom: 24px;
+}
+.portal-group:last-child { margin-bottom: 0; }
+.portal-group-label {
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-400);
+  margin-bottom: 10px;
+}
+.portal-admin-file-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--beige-50);
+  border: 1px solid var(--beige-200);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 0.88rem;
+}
+.portal-type-icon { font-size: 1.1rem; flex-shrink: 0; }
+.portal-admin-file-title {
+  font-weight: 600;
+  color: var(--text-dark);
+  flex: 1;
+}
+.portal-admin-file-name {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.portal-delete-btn {
+  background: none;
+  border: 1px solid #e0b0b0;
+  color: #c0392b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.portal-delete-btn:hover {
+  background: #ffeaea;
+  border-color: #c0392b;
+}
+
+/* ============ STUDENT PORTAL ============ */
+.portal-page {
+  min-height: 100vh;
+  background: var(--beige-50);
+}
+.portal-header {
+  background: linear-gradient(160deg, var(--green-600), var(--green-500));
+  padding: 28px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(47, 102, 65, 0.25);
+}
+.portal-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.portal-logo-arabic {
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.1rem;
+  color: var(--gold-200);
+  margin-bottom: 2px;
+}
+.portal-heading {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 2px;
+}
+.portal-subheading {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+  font-family: var(--font-nunito), sans-serif;
+}
+.portal-header-inner .btn-outline {
+  color: white !important;
+  border-color: rgba(255,255,255,0.5) !important;
+}
+.portal-header-inner .btn-outline:hover {
+  background: rgba(255,255,255,0.15) !important;
+  color: white !important;
+}
+.portal-body {
+  padding: 40px 32px 80px;
+}
+.portal-tabs-wrap {
+  overflow-x: auto;
+  margin-bottom: 32px;
+  -webkit-overflow-scrolling: touch;
+}
+.portal-tabs {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 4px;
+  min-width: max-content;
+}
+.portal-tab {
+  padding: 10px 22px;
+  border-radius: 50px;
+  border: 1.5px solid var(--beige-300);
+  background: white;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+.portal-tab:hover {
+  border-color: var(--green-300);
+  color: var(--green-500);
+}
+.portal-tab.active {
+  background: var(--green-500);
+  border-color: var(--green-500);
+  color: white;
+  box-shadow: 0 4px 14px rgba(47, 102, 65, 0.25);
+}
+.portal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.portal-section {}
+.portal-section-title {
+  font-size: 1rem;
+  font-family: var(--font-nunito), sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.portal-files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.portal-file-item {
+  background: white;
+  border: 1px solid var(--beige-200);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: box-shadow var(--transition);
+}
+.portal-file-item:hover { box-shadow: var(--shadow-md); }
+.portal-file-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+.portal-file-icon { font-size: 1.4rem; flex-shrink: 0; }
+.portal-file-name {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+.portal-file-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.portal-action-btn {
+  padding: 7px 18px;
+  border-radius: 50px;
+  border: 1.5px solid var(--green-300);
+  background: white;
+  color: var(--green-500);
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.portal-action-btn:hover {
+  background: var(--green-400);
+  border-color: var(--green-400);
+  color: white;
+}
+.portal-action-dl {
+  border-color: var(--beige-300);
+  color: var(--text-muted);
+}
+.portal-action-dl:hover {
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+  color: white;
+}
+.portal-pdf-embed {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.portal-recording {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.portal-audio {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+}
+.portal-video {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  margin-top: 8px;
+  background: black;
+}
+.portal-loading {
+  text-align: center;
+  padding: 80px 32px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.portal-empty {
+  text-align: center;
+  padding: 60px 32px;
+  color: var(--text-muted);
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--beige-200);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+  .portal-body { padding: 24px 16px 60px; }
+  .portal-file-item { padding: 14px 16px; }
+  .portal-tabs { gap: 6px; }
+  .portal-tab { padding: 8px 16px; font-size: 0.8rem; }
+  .portal-upload-row { flex-direction: column; }
+}

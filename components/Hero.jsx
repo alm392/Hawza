@@ -56,6 +56,7 @@ export default function Hero() {
         <div className="hero-buttons">
           <Link href="/signup" className="btn btn-primary">Enroll Now</Link>
           <a href="#about" className="btn btn-secondary">Learn More</a>
+          <Link href="/portal" className="btn btn-secondary">Student Log In</Link>
         </div>
       </div>
 

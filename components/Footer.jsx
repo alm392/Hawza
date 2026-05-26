@@ -41,6 +41,7 @@ export default function Footer() {
                 </li>
               ))}
               <li><Link href="/signup">Enroll</Link></li>
+              <li><Link href="/portal">Student Portal</Link></li>
             </ul>
           </div>
           <div className="footer-programs">

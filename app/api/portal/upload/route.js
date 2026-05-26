@@ -1,0 +1,60 @@
+import { put } from '@vercel/blob';
+import { cookies } from 'next/headers';
+import { createHash } from 'crypto';
+import { neon } from '@neondatabase/serverless';
+
+function isAdmin() {
+  const token = cookies().get('admin_token')?.value;
+  const expected = createHash('sha256')
+    .update(`${process.env.ADMIN_USER}:${process.env.ADMIN_PASS}:hawza-admin`)
+    .digest('hex');
+  return token === expected;
+}
+
+async function ensureTable(sql) {
+  await sql`
+    CREATE TABLE IF NOT EXISTS portal_files (
+      id           SERIAL PRIMARY KEY,
+      created_at   TIMESTAMPTZ DEFAULT NOW(),
+      lesson_number INTEGER NOT NULL,
+      subject      TEXT NOT NULL,
+      title        TEXT NOT NULL,
+      file_url     TEXT NOT NULL,
+      file_type    TEXT NOT NULL,
+      file_name    TEXT
+    )
+  `;
+}
+
+export async function POST(request) {
+  if (!isAdmin()) return Response.json({ ok: false }, { status: 403 });
+
+  const formData = await request.formData();
+  const file = formData.get('file');
+  const lessonNumber = Number(formData.get('lessonNumber'));
+  const subject = formData.get('subject');
+  const title = formData.get('title');
+
+  if (!file || !lessonNumber || !subject || !title) {
+    return Response.json({ ok: false, error: 'Missing required fields' }, { status: 400 });
+  }
+
+  const blob = await put(
+    `portal/lesson-${lessonNumber}/${subject.toLowerCase()}/${Date.now()}-${file.name}`,
+    file,
+    { access: 'public' }
+  );
+
+  const fileType = file.type.startsWith('audio/') ? 'audio'
+    : file.type.startsWith('video/') ? 'video'
+    : 'pdf';
+
+  const sql = neon(process.env.DATABASE_URL);
+  await ensureTable(sql);
+  await sql`
+    INSERT INTO portal_files (lesson_number, subject, title, file_url, file_type, file_name)
+    VALUES (${lessonNumber}, ${subject}, ${title}, ${blob.url}, ${fileType}, ${file.name})
+  `;
+
+  return Response.json({ ok: true, url: blob.url });
+}
