@@ -1855,6 +1855,108 @@ input, select, textarea, button {
   border-color: var(--text-dark);
   color: white;
 }
+.portal-action-delete {
+  border-color: #e0b0b0;
+  color: #c0392b;
+}
+.portal-action-delete:hover {
+  background: #c0392b;
+  border-color: #c0392b;
+  color: white;
+}
+
+/* Add Files button in header */
+.portal-btn-upload {
+  background: rgba(255,255,255,0.15) !important;
+  color: white !important;
+  border: 1.5px solid rgba(255,255,255,0.5) !important;
+}
+.portal-btn-upload:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+.portal-btn-upload-active {
+  background: white !important;
+  color: var(--green-600) !important;
+  border: 1.5px solid white !important;
+}
+
+/* Upload panel that slides in below header */
+.portal-upload-bar {
+  background: var(--green-600);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 28px 0;
+}
+.portal-upload-bar-title {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 16px;
+  font-family: var(--font-nunito), sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.portal-upload-panel {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.portal-upload-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.portal-upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+.portal-upload-field--wide { flex: 2; min-width: 200px; }
+.portal-upload-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.7);
+  font-family: var(--font-nunito), sans-serif;
+}
+.portal-upload-field input,
+.portal-upload-field select {
+  padding: 10px 14px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: white;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: var(--font-nunito), sans-serif;
+}
+.portal-upload-field input:focus,
+.portal-upload-field select:focus {
+  border-color: var(--gold-200);
+  background: rgba(255,255,255,0.15);
+}
+.portal-upload-field input::placeholder { color: rgba(255,255,255,0.4); }
+.portal-upload-field select option { background: var(--green-600); color: white; }
+.portal-upload-error {
+  color: #ffb3b3;
+  font-size: 0.85rem;
+  background: rgba(192,57,43,0.25);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.portal-upload-success {
+  color: #a8f0c6;
+  font-size: 0.85rem;
+  background: rgba(47,102,65,0.4);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
 .portal-pdf-embed {
   width: 100%;
   margin-top: 12px;
