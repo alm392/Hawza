@@ -3,12 +3,17 @@ import { cookies } from 'next/headers';
 import { createHash } from 'crypto';
 import { neon } from '@neondatabase/serverless';
 
-function isAdmin() {
-  const token = cookies().get('admin_token')?.value;
-  const expected = createHash('sha256')
+function isAuthed() {
+  const jar = cookies();
+  const adminTok = jar.get('admin_token')?.value;
+  const studentTok = jar.get('student_token')?.value;
+  const adminExpected = createHash('sha256')
     .update(`${process.env.ADMIN_USER}:${process.env.ADMIN_PASS}:hawza-admin`)
     .digest('hex');
-  return token === expected;
+  const studentExpected = createHash('sha256')
+    .update(`hawza-student:${process.env.STUDENT_PASS}`)
+    .digest('hex');
+  return adminTok === adminExpected || studentTok === studentExpected;
 }
 
 async function ensureTable(sql) {
@@ -27,7 +32,7 @@ async function ensureTable(sql) {
 }
 
 export async function POST(request) {
-  if (!isAdmin()) return Response.json({ ok: false }, { status: 403 });
+  if (!isAuthed()) return Response.json({ ok: false }, { status: 403 });
 
   const formData = await request.formData();
   const file = formData.get('file');
