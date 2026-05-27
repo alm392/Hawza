@@ -52,6 +52,7 @@ export async function POST(request) {
 
   const fileType = file.type.startsWith('audio/') ? 'audio'
     : file.type.startsWith('video/') ? 'video'
+    : file.type.startsWith('image/') ? 'image'
     : 'pdf';
 
   const sql = neon(process.env.DATABASE_URL);

@@ -83,10 +83,10 @@ function UploadPanel({ defaultWeek, onUploaded }) {
         </div>
       </div>
       <div className="portal-upload-field">
-        <label>File (PDF, MP3, MP4, M4A, WAV, MOV)</label>
+        <label>File (PDF, Image, MP3, MP4, M4A, WAV, MOV)</label>
         <input
           type="file"
-          accept=".pdf,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm"
+          accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm"
           onChange={(e) => setFile(e.target.files[0] || null)}
           required
         />
@@ -117,12 +117,12 @@ function FileRow({ f, isAdmin, onDeleted }) {
     <div className="portal-file-item">
       <div className="portal-file-meta">
         <span className="portal-file-icon">
-          {f.file_type === 'pdf' ? '📄' : f.file_type === 'audio' ? '🎵' : '🎬'}
+          {f.file_type === 'pdf' ? '📄' : f.file_type === 'audio' ? '🎵' : f.file_type === 'image' ? '🖼️' : '🎬'}
         </span>
         <span className="portal-file-name">{f.title}</span>
       </div>
       <div className="portal-file-actions">
-        {f.file_type === 'pdf' && (
+        {(f.file_type === 'pdf' || f.file_type === 'image') && (
           <button className="portal-action-btn" onClick={() => setExpanded((v) => !v)}>
             {expanded ? 'Close' : 'View'}
           </button>
@@ -149,6 +149,15 @@ function FileRow({ f, isAdmin, onDeleted }) {
             width="100%"
             height="640px"
             style={{ border: 'none', borderRadius: '8px' }}
+          />
+        </div>
+      )}
+      {f.file_type === 'image' && expanded && (
+        <div className="portal-pdf-embed">
+          <img
+            src={f.file_url}
+            alt={f.title}
+            style={{ maxWidth: '100%', borderRadius: '8px', display: 'block' }}
           />
         </div>
       )}
