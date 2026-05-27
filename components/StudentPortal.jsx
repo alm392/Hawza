@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { upload } from '@vercel/blob/client';
 
 const SUBJECTS = ['Quran', 'Aqaid', 'Fiqh (Ahkam)', 'Akhlaq', 'Tarikh', 'Hadith'];
 
@@ -21,6 +22,7 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadLabel, setUploadLabel] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const formRef = useRef(null);
@@ -35,25 +37,46 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
     setError('');
     setSuccess('');
 
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('lessonNumber', week);
-    fd.append('subject', subject);
-    fd.append('title', title);
+    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+    setUploadLabel(`Uploading ${sizeMB} MB…`);
 
-    const res = await fetch('/api/portal/upload', { method: 'POST', body: fd });
-    const data = await res.json();
+    try {
+      // File goes directly from the browser to Vercel Blob CDN — no server bottleneck
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/portal/upload',
+      });
 
-    if (data.ok) {
-      setSuccess('Uploaded successfully!');
-      setTitle('');
-      setFile(null);
-      formRef.current?.reset();
-      onUploaded({ week: Number(week), subject });
-    } else {
-      setError(data.error || 'Upload failed.');
+      // Save metadata to DB in a tiny JSON request
+      const saveRes = await fetch('/api/portal/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: blob.url,
+          lessonNumber: Number(week),
+          subject,
+          title,
+          mimeType: file.type,
+          fileName: file.name,
+        }),
+      });
+      const saveData = await saveRes.json();
+
+      if (saveData.ok) {
+        setSuccess('Uploaded successfully!');
+        setTitle('');
+        setFile(null);
+        formRef.current?.reset();
+        onUploaded({ week: Number(week), subject });
+      } else {
+        setError(saveData.error || 'Upload succeeded but could not save record.');
+      }
+    } catch (err) {
+      setError(err.message || 'Upload failed.');
     }
+
     setUploading(false);
+    setUploadLabel('');
   }
 
   return (
@@ -96,9 +119,22 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
       </div>
       {error && <p className="portal-upload-error">{error}</p>}
       {success && <p className="portal-upload-success">{success}</p>}
-      <button type="submit" className="btn btn-primary btn-sm" disabled={uploading}>
-        {uploading ? 'Uploading…' : 'Upload File'}
-      </button>
+
+      {uploading ? (
+        <div className="portal-upload-progress">
+          <div className="portal-upload-progress-label">
+            <span className="portal-upload-spinner" />
+            {uploadLabel}
+          </div>
+          <div className="portal-progress-bar">
+            <div className="portal-progress-indeterminate" />
+          </div>
+        </div>
+      ) : (
+        <button type="submit" className="btn btn-primary btn-sm">
+          Upload File
+        </button>
+      )}
     </form>
   );
 }

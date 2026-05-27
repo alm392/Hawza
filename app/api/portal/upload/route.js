@@ -1,7 +1,6 @@
-import { put } from '@vercel/blob';
+import { handleUpload } from '@vercel/blob/client';
 import { cookies } from 'next/headers';
 import { createHash } from 'crypto';
-import { neon } from '@neondatabase/serverless';
 
 function isAuthed() {
   const jar = cookies();
@@ -16,51 +15,37 @@ function isAuthed() {
   return adminTok === adminExpected || studentTok === studentExpected;
 }
 
-async function ensureTable(sql) {
-  await sql`
-    CREATE TABLE IF NOT EXISTS portal_files (
-      id           SERIAL PRIMARY KEY,
-      created_at   TIMESTAMPTZ DEFAULT NOW(),
-      lesson_number INTEGER NOT NULL,
-      subject      TEXT NOT NULL,
-      title        TEXT NOT NULL,
-      file_url     TEXT NOT NULL,
-      file_type    TEXT NOT NULL,
-      file_name    TEXT
-    )
-  `;
-}
-
+// This route only handles the client-token handshake.
+// The actual file never passes through this server — it goes directly to Vercel Blob CDN.
+// After upload, the client posts metadata to /api/portal/save.
 export async function POST(request) {
-  if (!isAuthed()) return Response.json({ ok: false }, { status: 403 });
+  const body = await request.json();
 
-  const formData = await request.formData();
-  const file = formData.get('file');
-  const lessonNumber = Number(formData.get('lessonNumber'));
-  const subject = formData.get('subject');
-  const title = formData.get('title');
-
-  if (!file || !lessonNumber || !subject || !title) {
-    return Response.json({ ok: false, error: 'Missing required fields' }, { status: 400 });
+  if (body.type === 'blob.generate-client-token' && !isAuthed()) {
+    return Response.json({ ok: false }, { status: 403 });
   }
 
-  const blob = await put(
-    `portal/lesson-${lessonNumber}/${subject.toLowerCase()}/${Date.now()}-${file.name}`,
-    file,
-    { access: 'public' }
-  );
-
-  const fileType = file.type.startsWith('audio/') ? 'audio'
-    : file.type.startsWith('video/') ? 'video'
-    : file.type.startsWith('image/') ? 'image'
-    : 'pdf';
-
-  const sql = neon(process.env.DATABASE_URL);
-  await ensureTable(sql);
-  await sql`
-    INSERT INTO portal_files (lesson_number, subject, title, file_url, file_type, file_name)
-    VALUES (${lessonNumber}, ${subject}, ${title}, ${blob.url}, ${fileType}, ${file.name})
-  `;
-
-  return Response.json({ ok: true, url: blob.url });
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: [
+          'application/pdf',
+          'audio/*',
+          'video/*',
+          'image/*',
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
+        ],
+        maximumSizeInBytes: 500 * 1024 * 1024, // 500 MB
+      }),
+      onUploadCompleted: async () => {},
+    });
+    return Response.json(jsonResponse);
+  } catch (err) {
+    return Response.json({ error: err.message }, { status: 400 });
+  }
 }

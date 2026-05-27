@@ -2004,6 +2004,56 @@ input, select, textarea, button {
   .portal-upload-row { flex-direction: column; }
 }
 
+/* ============ PORTAL UPLOAD PROGRESS ============ */
+@keyframes indeterminate {
+  0%   { left: -40%; right: 100%; }
+  50%  { left: 20%;  right: -30%; }
+  100% { left: 100%; right: -10%; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.portal-upload-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.portal-upload-progress-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.9);
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.portal-upload-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+.portal-progress-bar {
+  height: 5px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.portal-progress-indeterminate {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40%;
+  background: var(--gold-200);
+  border-radius: 3px;
+  animation: indeterminate 1.6s ease-in-out infinite;
+}
+
 /* ============ PORTAL SIDEBAR LAYOUT ============ */
 :root {
   --portal-header-h: 140px;
