@@ -13,9 +13,11 @@ const SUBJECT_META = {
   'Hadith':       { icon: '📝' },
 };
 
-function UploadPanel({ defaultWeek, onUploaded }) {
+const DEFAULT_WEEKS = [1, 2, 3, 4, 5, 6];
+
+function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
   const [week, setWeek] = useState(String(defaultWeek || 1));
-  const [subject, setSubject] = useState(SUBJECTS[0]);
+  const [subject, setSubject] = useState(defaultSubject || SUBJECTS[0]);
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -24,6 +26,7 @@ function UploadPanel({ defaultWeek, onUploaded }) {
   const formRef = useRef(null);
 
   useEffect(() => { setWeek(String(defaultWeek || 1)); }, [defaultWeek]);
+  useEffect(() => { setSubject(defaultSubject || SUBJECTS[0]); }, [defaultSubject]);
 
   async function handleUpload(e) {
     e.preventDefault();
@@ -46,7 +49,7 @@ function UploadPanel({ defaultWeek, onUploaded }) {
       setTitle('');
       setFile(null);
       formRef.current?.reset();
-      onUploaded();
+      onUploaded({ week: Number(week), subject });
     } else {
       setError(data.error || 'Upload failed.');
     }
@@ -127,49 +130,28 @@ function FileRow({ f, isAdmin, onDeleted }) {
             {expanded ? 'Close' : 'View'}
           </button>
         )}
-        <a
-          href={f.file_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="portal-action-btn portal-action-dl"
-        >
+        <a href={f.file_url} target="_blank" rel="noopener noreferrer" className="portal-action-btn portal-action-dl">
           Download
         </a>
         {isAdmin && (
-          <button className="portal-action-btn portal-action-delete" onClick={handleDelete}>
-            Delete
-          </button>
+          <button className="portal-action-btn portal-action-delete" onClick={handleDelete}>Delete</button>
         )}
       </div>
       {f.file_type === 'pdf' && expanded && (
         <div className="portal-pdf-embed">
-          <iframe
-            src={f.file_url}
-            title={f.title}
-            width="100%"
-            height="640px"
-            style={{ border: 'none', borderRadius: '8px' }}
-          />
+          <iframe src={f.file_url} title={f.title} width="100%" height="640px" style={{ border: 'none', borderRadius: '8px' }} />
         </div>
       )}
       {f.file_type === 'image' && expanded && (
         <div className="portal-pdf-embed">
-          <img
-            src={f.file_url}
-            alt={f.title}
-            style={{ maxWidth: '100%', borderRadius: '8px', display: 'block' }}
-          />
+          <img src={f.file_url} alt={f.title} style={{ maxWidth: '100%', borderRadius: '8px', display: 'block' }} />
         </div>
       )}
       {f.file_type === 'audio' && (
-        <audio controls src={f.file_url} preload="none" className="portal-audio">
-          Your browser does not support audio playback.
-        </audio>
+        <audio controls src={f.file_url} preload="none" className="portal-audio" />
       )}
       {f.file_type === 'video' && (
-        <video controls src={f.file_url} preload="none" className="portal-video">
-          Your browser does not support video playback.
-        </video>
+        <video controls src={f.file_url} preload="none" className="portal-video" />
       )}
     </div>
   );
@@ -181,19 +163,14 @@ function LoadingSkeleton() {
       <aside className="portal-sidebar">
         <div className="portal-skeleton portal-skeleton-btn" />
         <div className="portal-skeleton portal-skeleton-nav-label" />
-        {[1, 2, 3, 4, 5].map((i) => (
-          <div
-            key={i}
-            className="portal-skeleton portal-skeleton-week"
-            style={{ animationDelay: `${i * 0.07}s` }}
-          />
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="portal-skeleton portal-skeleton-week" style={{ animationDelay: `${i * 0.07}s` }} />
         ))}
       </aside>
       <main className="portal-main">
-        <div className="portal-skeleton portal-skeleton-heading" />
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="portal-skeleton-subject-card" style={{ animationDelay: `${i * 0.1}s` }}>
-            <div className="portal-skeleton portal-skeleton-subject-head" />
+        <div className="portal-skeleton portal-skeleton-heading" style={{ width: 220, marginBottom: 28 }} />
+        {[1, 2].map((i) => (
+          <div key={i} className="portal-skeleton-subject-card">
             <div className="portal-skeleton portal-skeleton-file" />
             <div className="portal-skeleton portal-skeleton-file" style={{ width: '75%' }} />
           </div>
@@ -205,7 +182,8 @@ function LoadingSkeleton() {
 
 export default function StudentPortal({ isAdmin }) {
   const [files, setFiles] = useState([]);
-  const [activeWeek, setActiveWeek] = useState(null);
+  const [activeWeek, setActiveWeek] = useState(1);
+  const [activeSubject, setActiveSubject] = useState('Quran');
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   const router = useRouter();
@@ -213,12 +191,7 @@ export default function StudentPortal({ isAdmin }) {
   async function loadFiles() {
     const res = await fetch('/api/portal/files');
     const data = await res.json();
-    if (data.ok) {
-      setFiles(data.files);
-      if (activeWeek === null && data.files.length > 0) {
-        setActiveWeek(data.files[0].lesson_number);
-      }
-    }
+    if (data.ok) setFiles(data.files);
     setLoading(false);
   }
 
@@ -230,8 +203,13 @@ export default function StudentPortal({ isAdmin }) {
     router.refresh();
   }
 
-  const weeks = [...new Set(files.map((f) => f.lesson_number))].sort((a, b) => a - b);
-  const weekFiles = files.filter((f) => f.lesson_number === activeWeek);
+  // Always show weeks 1–6 plus any extra weeks from uploaded files
+  const weeks = [...new Set([...DEFAULT_WEEKS, ...files.map((f) => f.lesson_number)])].sort((a, b) => a - b);
+
+  const subjectFiles = files.filter((f) => f.lesson_number === activeWeek && f.subject === activeSubject);
+  const notes      = subjectFiles.filter((f) => f.file_type === 'pdf');
+  const images     = subjectFiles.filter((f) => f.file_type === 'image');
+  const recordings = subjectFiles.filter((f) => f.file_type === 'audio' || f.file_type === 'video');
 
   return (
     <>
@@ -250,6 +228,7 @@ export default function StudentPortal({ isAdmin }) {
         <LoadingSkeleton />
       ) : (
         <div className="portal-layout">
+          {/* ── Sidebar ── */}
           <aside className="portal-sidebar">
             <button
               className={`portal-add-btn${showUpload ? ' active' : ''}`}
@@ -258,92 +237,101 @@ export default function StudentPortal({ isAdmin }) {
               {showUpload ? '✕ Close' : '+ Add Resources'}
             </button>
 
-            {weeks.length > 0 && (
-              <nav className="portal-week-nav">
-                <p className="portal-nav-label">Weeks</p>
-                <div className="portal-week-list">
-                  {weeks.map((w) => (
-                    <button
-                      key={w}
-                      className={`portal-week-btn${activeWeek === w ? ' active' : ''}`}
-                      onClick={() => { setActiveWeek(w); setShowUpload(false); }}
-                    >
-                      Week {w}
-                    </button>
-                  ))}
-                </div>
-              </nav>
-            )}
+            <nav className="portal-week-nav">
+              <p className="portal-nav-label">Weeks</p>
+              <div className="portal-week-list">
+                {weeks.map((w) => {
+                  const isOpen = activeWeek === w;
+                  return (
+                    <div key={w} className="portal-week-group">
+                      <button
+                        className={`portal-week-btn${isOpen ? ' active' : ''}`}
+                        onClick={() => setActiveWeek(w)}
+                      >
+                        <span>Week {w}</span>
+                        <span className="portal-week-chevron">{isOpen ? '▾' : '▸'}</span>
+                      </button>
+
+                      {isOpen && (
+                        <div className="portal-subject-list">
+                          {SUBJECTS.map((s) => {
+                            const count = files.filter((f) => f.lesson_number === w && f.subject === s).length;
+                            return (
+                              <button
+                                key={s}
+                                className={`portal-subject-btn${activeSubject === s ? ' active' : ''}`}
+                                onClick={() => setActiveSubject(s)}
+                              >
+                                <span className="portal-subject-btn-icon">{SUBJECT_META[s].icon}</span>
+                                <span className="portal-subject-btn-label">{s}</span>
+                                {count > 0 && <span className="portal-subject-dot" />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </nav>
           </aside>
 
+          {/* ── Main content ── */}
           <main className="portal-main">
             {showUpload && (
               <div className="portal-upload-card">
                 <h3 className="portal-upload-bar-title">Upload Resource</h3>
                 <UploadPanel
-                  defaultWeek={activeWeek || 1}
-                  onUploaded={() => { loadFiles(); setShowUpload(false); }}
+                  defaultWeek={activeWeek}
+                  defaultSubject={activeSubject}
+                  onUploaded={({ week, subject }) => {
+                    loadFiles();
+                    setShowUpload(false);
+                    setActiveWeek(week);
+                    setActiveSubject(subject);
+                  }}
                 />
               </div>
             )}
 
-            {weeks.length === 0 ? (
-              <div className="portal-empty">
-                No materials uploaded yet. Click "+ Add Resources" to get started.
-              </div>
-            ) : activeWeek === null ? (
-              <div className="portal-empty">Select a week from the sidebar.</div>
+            <div className="portal-view-header">
+              <span className="portal-view-week">Week {activeWeek}</span>
+              <span className="portal-view-sep">›</span>
+              <span className="portal-view-subject">
+                {SUBJECT_META[activeSubject].icon} {activeSubject}
+              </span>
+            </div>
+
+            {subjectFiles.length === 0 ? (
+              <div className="portal-empty">No resources uploaded for this subject yet.</div>
             ) : (
-              <>
-                <h2 className="portal-week-heading">Week {activeWeek}</h2>
-                <div className="portal-subjects">
-                  {SUBJECTS.map((subject) => {
-                    const subjectFiles = weekFiles.filter((f) => f.subject === subject);
-                    const notes = subjectFiles.filter((f) => f.file_type === 'pdf');
-                    const recordings = subjectFiles.filter((f) => f.file_type === 'audio' || f.file_type === 'video');
-                    const { icon } = SUBJECT_META[subject];
-                    return (
-                      <div key={subject} className="portal-subject-section">
-                        <div className="portal-subject-header">
-                          <span className="portal-subject-icon">{icon}</span>
-                          <h3 className="portal-subject-name">{subject}</h3>
-                          <span className="portal-subject-count">
-                            {subjectFiles.length > 0
-                              ? `${subjectFiles.length} file${subjectFiles.length !== 1 ? 's' : ''}`
-                              : 'No files yet'}
-                          </span>
-                        </div>
-                        {subjectFiles.length === 0 ? (
-                          <p className="portal-subject-empty">No resources uploaded for this subject yet.</p>
-                        ) : (
-                          <div className="portal-subject-body">
-                            {notes.length > 0 && (
-                              <div className="portal-section">
-                                <p className="portal-section-title">Notes</p>
-                                <div className="portal-files-list">
-                                  {notes.map((f) => (
-                                    <FileRow key={f.id} f={f} isAdmin={isAdmin} onDeleted={loadFiles} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {recordings.length > 0 && (
-                              <div className="portal-section">
-                                <p className="portal-section-title">Recordings</p>
-                                <div className="portal-files-list">
-                                  {recordings.map((f) => (
-                                    <FileRow key={f.id} f={f} isAdmin={isAdmin} onDeleted={loadFiles} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
+              <div className="portal-subject-body">
+                {notes.length > 0 && (
+                  <div className="portal-section">
+                    <p className="portal-section-title">Notes</p>
+                    <div className="portal-files-list">
+                      {notes.map((f) => <FileRow key={f.id} f={f} isAdmin={isAdmin} onDeleted={loadFiles} />)}
+                    </div>
+                  </div>
+                )}
+                {images.length > 0 && (
+                  <div className="portal-section">
+                    <p className="portal-section-title">Images</p>
+                    <div className="portal-files-list">
+                      {images.map((f) => <FileRow key={f.id} f={f} isAdmin={isAdmin} onDeleted={loadFiles} />)}
+                    </div>
+                  </div>
+                )}
+                {recordings.length > 0 && (
+                  <div className="portal-section">
+                    <p className="portal-section-title">Recordings</p>
+                    <div className="portal-files-list">
+                      {recordings.map((f) => <FileRow key={f.id} f={f} isAdmin={isAdmin} onDeleted={loadFiles} />)}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </main>
         </div>
