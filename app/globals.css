@@ -2005,11 +2005,6 @@ input, select, textarea, button {
 }
 
 /* ============ PORTAL UPLOAD PROGRESS ============ */
-@keyframes indeterminate {
-  0%   { left: -40%; right: 100%; }
-  50%  { left: 20%;  right: -30%; }
-  100% { left: 100%; right: -10%; }
-}
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -2023,35 +2018,75 @@ input, select, textarea, button {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255,255,255,0.95);
   font-family: var(--font-nunito), sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 .portal-upload-spinner {
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255,255,255,0.35);
+  border: 2.5px solid rgba(255,255,255,0.35);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 0.75s linear infinite;
+  animation: spin 0.7s linear infinite;
   flex-shrink: 0;
 }
 .portal-progress-bar {
-  height: 5px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 3px;
+  height: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
   overflow: hidden;
-  position: relative;
 }
-.portal-progress-indeterminate {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 40%;
-  background: var(--gold-200);
-  border-radius: 3px;
-  animation: indeterminate 1.6s ease-in-out infinite;
+.portal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-200), var(--gold-100));
+  border-radius: 4px;
+  transition: width 0.18s ease-out;
+  box-shadow: 0 0 8px rgba(212,169,106,0.6);
+}
+
+.portal-upload-type-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.portal-toggle-btn {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.28);
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.portal-toggle-btn:hover {
+  border-color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.9);
+}
+.portal-toggle-btn.active {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
+}
+
+.portal-youtube-embed {
+  margin-top: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  width: 100%;
+}
+.portal-youtube-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
 }
 
 /* ============ PORTAL SIDEBAR LAYOUT ============ */

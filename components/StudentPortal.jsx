@@ -16,13 +16,28 @@ const SUBJECT_META = {
 
 const DEFAULT_WEEKS = [1, 2, 3, 4, 5, 6];
 
+function parseYoutubeId(url) {
+  try {
+    const u = new URL(url.trim());
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1).split('/')[0] || null;
+    if (u.hostname === 'youtube.com' || u.hostname === 'www.youtube.com') {
+      if (u.searchParams.has('v')) return u.searchParams.get('v');
+      const m = u.pathname.match(/\/(?:embed|v|shorts)\/([a-zA-Z0-9_-]{11})/);
+      if (m) return m[1];
+    }
+  } catch {}
+  return null;
+}
+
 function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
   const [week, setWeek] = useState(String(defaultWeek || 1));
   const [subject, setSubject] = useState(defaultSubject || SUBJECTS[0]);
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [uploadType, setUploadType] = useState('file');
   const [uploading, setUploading] = useState(false);
-  const [uploadLabel, setUploadLabel] = useState('');
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const formRef = useRef(null);
@@ -30,25 +45,69 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
   useEffect(() => { setWeek(String(defaultWeek || 1)); }, [defaultWeek]);
   useEffect(() => { setSubject(defaultSubject || SUBJECTS[0]); }, [defaultSubject]);
 
-  async function handleUpload(e) {
+  function switchType(t) {
+    setUploadType(t);
+    setError('');
+    setSuccess('');
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!file) return;
-    setUploading(true);
     setError('');
     setSuccess('');
 
-    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
-    setUploadLabel(`Uploading ${sizeMB} MB…`);
+    if (uploadType === 'youtube') {
+      const videoId = parseYoutubeId(youtubeUrl);
+      if (!videoId) {
+        setError('Invalid YouTube URL. Paste a link like youtube.com/watch?v=... or youtu.be/...');
+        return;
+      }
+      setUploading(true);
+      try {
+        const res = await fetch('/api/portal/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: `https://www.youtube-nocookie.com/embed/${videoId}`,
+            lessonNumber: Number(week),
+            subject,
+            title,
+            fileType: 'youtube',
+          }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          setSuccess('Video added!');
+          setTitle('');
+          setYoutubeUrl('');
+          formRef.current?.reset();
+          onUploaded({ week: Number(week), subject });
+        } else {
+          setError(data.error || 'Could not save video.');
+        }
+      } catch {
+        setError('Network error. Please try again.');
+      } finally {
+        setUploading(false);
+      }
+      return;
+    }
+
+    if (!file) return;
+    setUploading(true);
+    setProgress(0);
 
     try {
-      // File goes directly from the browser to Vercel Blob CDN — no server bottleneck
       const blob = await upload(file.name, file, {
         access: 'public',
         handleUploadUrl: '/api/portal/upload',
+        multipart: true,
+        onUploadProgress: ({ percentage }) => {
+          setProgress(Math.min(99, Math.round(percentage)));
+        },
       });
 
-      // Save metadata to DB in a tiny JSON request
-      const saveRes = await fetch('/api/portal/save', {
+      const res = await fetch('/api/portal/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -60,27 +119,50 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
           fileName: file.name,
         }),
       });
-      const saveData = await saveRes.json();
+      const data = await res.json();
 
-      if (saveData.ok) {
-        setSuccess('Uploaded successfully!');
-        setTitle('');
-        setFile(null);
-        formRef.current?.reset();
-        onUploaded({ week: Number(week), subject });
+      if (data.ok) {
+        setProgress(100);
+        setTimeout(() => {
+          setSuccess('Uploaded successfully!');
+          setUploading(false);
+          setProgress(0);
+          setTitle('');
+          setFile(null);
+          formRef.current?.reset();
+          onUploaded({ week: Number(week), subject });
+        }, 400);
       } else {
-        setError(saveData.error || 'Upload succeeded but could not save record.');
+        setError(data.error || 'Upload succeeded but could not save the record.');
+        setUploading(false);
+        setProgress(0);
       }
     } catch (err) {
-      setError(err.message || 'Upload failed.');
+      let msg = err?.message || 'Upload failed.';
+      if (msg.includes('NetworkError') || msg.includes('fetch failed') || msg.includes('Failed to fetch')) {
+        msg = 'Network error — check your connection and try again.';
+      } else if (msg.includes('maximum') || msg.includes('too large') || msg.includes('413')) {
+        msg = 'File is too large to upload.';
+      } else if (msg.includes('403') || msg.includes('401') || msg.includes('Forbidden')) {
+        msg = 'Not authorised — please log in again.';
+      }
+      setError(msg);
+      setUploading(false);
+      setProgress(0);
     }
-
-    setUploading(false);
-    setUploadLabel('');
   }
 
   return (
-    <form ref={formRef} onSubmit={handleUpload} className="portal-upload-panel">
+    <form ref={formRef} onSubmit={handleSubmit} className="portal-upload-panel">
+      <div className="portal-upload-type-toggle">
+        <button type="button" className={`portal-toggle-btn${uploadType === 'file' ? ' active' : ''}`} onClick={() => switchType('file')}>
+          Upload File
+        </button>
+        <button type="button" className={`portal-toggle-btn${uploadType === 'youtube' ? ' active' : ''}`} onClick={() => switchType('youtube')}>
+          YouTube Video
+        </button>
+      </div>
+
       <div className="portal-upload-row">
         <div className="portal-upload-field">
           <label>Week</label>
@@ -108,31 +190,55 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
           />
         </div>
       </div>
-      <div className="portal-upload-field">
-        <label>File (PDF, Image, MP3, MP4, M4A, WAV, MOV)</label>
-        <input
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm"
-          onChange={(e) => setFile(e.target.files[0] || null)}
-          required
-        />
-      </div>
+
+      {uploadType === 'file' ? (
+        <div className="portal-upload-field">
+          <label>File (PDF, Image, MP3, MP4, M4A, WAV, MOV)</label>
+          <input
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm"
+            onChange={(e) => setFile(e.target.files[0] || null)}
+            required
+          />
+        </div>
+      ) : (
+        <div className="portal-upload-field">
+          <label>YouTube URL</label>
+          <input
+            type="url"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=..."
+            required
+          />
+        </div>
+      )}
+
       {error && <p className="portal-upload-error">{error}</p>}
       {success && <p className="portal-upload-success">{success}</p>}
 
       {uploading ? (
-        <div className="portal-upload-progress">
-          <div className="portal-upload-progress-label">
-            <span className="portal-upload-spinner" />
-            {uploadLabel}
+        uploadType === 'file' ? (
+          <div className="portal-upload-progress">
+            <div className="portal-upload-progress-label">
+              <span className="portal-upload-spinner" />
+              <span>Uploading {(file.size / 1024 / 1024).toFixed(1)} MB — {progress}%</span>
+            </div>
+            <div className="portal-progress-bar">
+              <div className="portal-progress-fill" style={{ width: `${progress}%` }} />
+            </div>
           </div>
-          <div className="portal-progress-bar">
-            <div className="portal-progress-indeterminate" />
+        ) : (
+          <div className="portal-upload-progress">
+            <div className="portal-upload-progress-label">
+              <span className="portal-upload-spinner" />
+              <span>Saving…</span>
+            </div>
           </div>
-        </div>
+        )
       ) : (
         <button type="submit" className="btn btn-primary btn-sm">
-          Upload File
+          {uploadType === 'youtube' ? 'Add Video' : 'Upload File'}
         </button>
       )}
     </form>
@@ -152,23 +258,32 @@ function FileRow({ f, isAdmin, onDeleted }) {
     onDeleted();
   }
 
+  const icon = f.file_type === 'pdf' ? '📄'
+    : f.file_type === 'audio' ? '🎵'
+    : f.file_type === 'image' ? '🖼️'
+    : f.file_type === 'youtube' ? '▶️'
+    : '🎬';
+
+  const canExpand = f.file_type === 'pdf' || f.file_type === 'image' || f.file_type === 'youtube';
+  const expandLabel = expanded ? 'Close' : f.file_type === 'youtube' ? 'Play' : 'View';
+
   return (
     <div className="portal-file-item">
       <div className="portal-file-meta">
-        <span className="portal-file-icon">
-          {f.file_type === 'pdf' ? '📄' : f.file_type === 'audio' ? '🎵' : f.file_type === 'image' ? '🖼️' : '🎬'}
-        </span>
+        <span className="portal-file-icon">{icon}</span>
         <span className="portal-file-name">{f.title}</span>
       </div>
       <div className="portal-file-actions">
-        {(f.file_type === 'pdf' || f.file_type === 'image') && (
+        {canExpand && (
           <button className="portal-action-btn" onClick={() => setExpanded((v) => !v)}>
-            {expanded ? 'Close' : 'View'}
+            {expandLabel}
           </button>
         )}
-        <a href={f.file_url} target="_blank" rel="noopener noreferrer" className="portal-action-btn portal-action-dl">
-          Download
-        </a>
+        {f.file_type !== 'youtube' && (
+          <a href={f.file_url} target="_blank" rel="noopener noreferrer" className="portal-action-btn portal-action-dl">
+            Download
+          </a>
+        )}
         {isAdmin && (
           <button className="portal-action-btn portal-action-delete" onClick={handleDelete}>Delete</button>
         )}
@@ -188,6 +303,17 @@ function FileRow({ f, isAdmin, onDeleted }) {
       )}
       {f.file_type === 'video' && (
         <video controls src={f.file_url} preload="none" className="portal-video" />
+      )}
+      {f.file_type === 'youtube' && expanded && (
+        <div className="portal-youtube-embed">
+          <iframe
+            src={f.file_url}
+            title={f.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="portal-youtube-iframe"
+          />
+        </div>
       )}
     </div>
   );
@@ -245,7 +371,7 @@ export default function StudentPortal({ isAdmin }) {
   const subjectFiles = files.filter((f) => f.lesson_number === activeWeek && f.subject === activeSubject);
   const notes      = subjectFiles.filter((f) => f.file_type === 'pdf');
   const images     = subjectFiles.filter((f) => f.file_type === 'image');
-  const recordings = subjectFiles.filter((f) => f.file_type === 'audio' || f.file_type === 'video');
+  const recordings = subjectFiles.filter((f) => f.file_type === 'audio' || f.file_type === 'video' || f.file_type === 'youtube');
 
   return (
     <>

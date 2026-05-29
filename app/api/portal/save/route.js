@@ -33,22 +33,24 @@ async function ensureTable(sql) {
 export async function POST(request) {
   if (!isAuthed()) return Response.json({ ok: false }, { status: 403 });
 
-  const { url, lessonNumber, subject, title, mimeType, fileName } = await request.json();
+  const { url, lessonNumber, subject, title, mimeType, fileName, fileType: explicitFileType } = await request.json();
 
   if (!url || !lessonNumber || !subject || !title) {
     return Response.json({ ok: false, error: 'Missing required fields' }, { status: 400 });
   }
 
-  const fileType = mimeType?.startsWith('audio/') ? 'audio'
+  const fileType = explicitFileType || (
+    mimeType?.startsWith('audio/') ? 'audio'
     : mimeType?.startsWith('video/') ? 'video'
     : mimeType?.startsWith('image/') ? 'image'
-    : 'pdf';
+    : 'pdf'
+  );
 
   const sql = neon(process.env.DATABASE_URL);
   await ensureTable(sql);
   await sql`
     INSERT INTO portal_files (lesson_number, subject, title, file_url, file_type, file_name)
-    VALUES (${lessonNumber}, ${subject}, ${title}, ${url}, ${fileType}, ${fileName})
+    VALUES (${lessonNumber}, ${subject}, ${title}, ${url}, ${fileType}, ${fileName ?? null})
   `;
 
   return Response.json({ ok: true });
