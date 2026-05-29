@@ -472,13 +472,14 @@ export default function StudentPortal({ isAdmin }) {
               </div>
             )}
 
-            <div className="portal-view-header">
+            <button className="portal-view-header" onClick={() => setSidebarOpen(true)}>
               <span className="portal-view-week">Week {activeWeek}</span>
               <span className="portal-view-sep">›</span>
               <span className="portal-view-subject">
                 {SUBJECT_META[activeSubject].icon} {activeSubject}
               </span>
-            </div>
+              <span className="portal-view-nav-hint">☰</span>
+            </button>
 
             {subjectFiles.length === 0 ? (
               <div className="portal-empty">No resources uploaded for this subject yet.</div>
