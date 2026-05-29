@@ -348,6 +348,7 @@ export default function StudentPortal({ isAdmin }) {
   const [activeSubject, setActiveSubject] = useState('Quran');
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
 
   async function loadFiles() {
@@ -377,10 +378,21 @@ export default function StudentPortal({ isAdmin }) {
     <>
       <div className="portal-header">
         <div className="portal-header-inner container">
-          <div>
-            <div className="portal-logo-arabic">إدارة جعفرية</div>
-            <h2 className="portal-heading">Student Portal</h2>
-            <p className="portal-subheading">Idarah-e-Jafaria Melbourne Hawza</p>
+          <div className="portal-header-brand">
+            <button
+              className={`portal-hamburger${sidebarOpen ? ' open' : ''}`}
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-label="Toggle navigation"
+            >
+              <span className="portal-hamburger-line" />
+              <span className="portal-hamburger-line" />
+              <span className="portal-hamburger-line" />
+            </button>
+            <div>
+              <div className="portal-logo-arabic">إدارة جعفرية</div>
+              <h2 className="portal-heading">Student Portal</h2>
+              <p className="portal-subheading">Idarah-e-Jafaria Melbourne Hawza</p>
+            </div>
           </div>
           <button onClick={handleLogout} className="btn btn-outline btn-sm">Log Out</button>
         </div>
@@ -390,8 +402,11 @@ export default function StudentPortal({ isAdmin }) {
         <LoadingSkeleton />
       ) : (
         <div className="portal-layout">
+          {sidebarOpen && (
+            <div className="portal-sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+          )}
           {/* ── Sidebar ── */}
-          <aside className="portal-sidebar">
+          <aside className={`portal-sidebar${sidebarOpen ? ' open' : ''}`}>
             <button
               className={`portal-add-btn${showUpload ? ' active' : ''}`}
               onClick={() => setShowUpload((v) => !v)}
@@ -422,7 +437,7 @@ export default function StudentPortal({ isAdmin }) {
                               <button
                                 key={s}
                                 className={`portal-subject-btn${activeSubject === s ? ' active' : ''}`}
-                                onClick={() => setActiveSubject(s)}
+                                onClick={() => { setActiveSubject(s); setSidebarOpen(false); }}
                               >
                                 <span className="portal-subject-btn-icon">{SUBJECT_META[s].icon}</span>
                                 <span className="portal-subject-btn-label">{s}</span>
