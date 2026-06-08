@@ -508,6 +508,242 @@ input, select, textarea, button {
   line-height: 1.5;
 }
 
+/* ============ ACCREDITATION ============ */
+.accreditation {
+  padding: 100px 0;
+  background: var(--beige-50);
+}
+
+/* ---- Grid ---- */
+.accredi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* ---- Card ---- */
+.accredi-card {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: var(--radius);
+  transition: transform var(--transition);
+}
+.accredi-card:hover { transform: translateY(-5px); }
+
+.accredi-card-img-wrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  border: 1.5px solid var(--gold-200);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.accredi-card:hover .accredi-card-img-wrap {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--gold-300);
+}
+.accredi-card-img {
+  display: block;
+  transition: transform 0.5s ease;
+}
+.accredi-card:hover .accredi-card-img { transform: scale(1.04); }
+
+.accredi-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 66, 40, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.accredi-card:hover .accredi-card-overlay { opacity: 1; }
+
+.accredi-card-zoom {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.75);
+  transform: scale(0.7);
+  transition: transform 0.35s ease;
+  flex-shrink: 0;
+}
+.accredi-card:hover .accredi-card-zoom { transform: scale(1); }
+.accredi-card-zoom::before,
+.accredi-card-zoom::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 2px;
+  top: 50%; left: 50%;
+}
+.accredi-card-zoom::before { width: 18px; height: 2px; transform: translate(-50%, -50%); }
+.accredi-card-zoom::after  { width: 2px; height: 18px; transform: translate(-50%, -50%); }
+
+.accredi-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 2px;
+  text-align: center;
+}
+.accredi-card-name {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--green-600);
+  line-height: 1.35;
+}
+.accredi-card-role {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ---- Lightbox ---- */
+.accredi-lb {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+.accredi-lb-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 18, 10, 0.9);
+  backdrop-filter: blur(8px);
+}
+.accredi-lb-close {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 3;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.accredi-lb-close:hover { background: rgba(255,255,255,0.24); }
+
+.accredi-lb-side {
+  position: relative;
+  z-index: 2;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.09);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  color: white;
+  font-size: 2.4rem;
+  font-weight: 300;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  padding-bottom: 3px;
+  transition: background 0.2s;
+}
+.accredi-lb-side:hover { background: rgba(255,255,255,0.18); }
+
+.accredi-lb-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: min(520px, calc(100vw - 200px));
+  max-height: calc(100vh - 40px);
+}
+.accredi-lb-frame {
+  overflow-y: auto;
+  max-height: calc(100vh - 165px);
+  background: white;
+  padding: 12px;
+  border: 2px solid var(--gold-200);
+  border-radius: var(--radius);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.55);
+  width: 100%;
+}
+.accredi-lb-img { display: block; border-radius: 6px; width: 100%; height: auto; }
+
+.accredi-lb-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+.accredi-lb-name {
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--gold-100);
+  line-height: 1.35;
+}
+.accredi-lb-role { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.4; }
+.accredi-lb-count {
+  font-size: 0.74rem;
+  font-family: var(--font-nunito), sans-serif;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+.accredi-lb-mobile-nav { display: none; }
+.accredi-lb-nav-sm {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  padding-bottom: 2px;
+  transition: background 0.2s;
+}
+.accredi-lb-nav-sm:hover { background: rgba(255,255,255,0.22); }
+
+/* ---- Responsive grid ---- */
+@media (max-width: 960px) {
+  .accredi-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+}
+@media (max-width: 640px) {
+  .accreditation { padding: 72px 0; }
+  .accredi-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .accredi-card-name { font-size: 0.82rem; }
+
+  /* Mobile lightbox */
+  .accredi-lb { padding: 54px 14px 16px; gap: 0; flex-direction: column; }
+  .accredi-lb-side { display: none; }
+  .accredi-lb-center { max-width: 100%; max-height: calc(100vh - 68px); width: 100%; }
+  .accredi-lb-frame { max-height: calc(100vh - 205px); width: 100%; }
+  .accredi-lb-mobile-nav { display: flex; align-items: center; gap: 20px; }
+  .accredi-lb-count-desk { display: none; }
+  .accredi-lb-count { margin-top: 0; }
+}
+
 /* ============ PROGRAMS ============ */
 .programs {
   padding: 100px 0;

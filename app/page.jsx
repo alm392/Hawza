@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Accreditation from '@/components/Accreditation';
 import About from '@/components/About';
 import Programs from '@/components/Programs';
 import Curriculum from '@/components/Curriculum';
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <Accreditation />
       <About />
       <Programs />
       <Curriculum />

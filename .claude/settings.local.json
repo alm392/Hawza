@@ -24,7 +24,12 @@
       "Bash(node *)",
       "Bash(npm run *)",
       "Bash(curl -s http://localhost:3000/portal -o /dev/null -w \"%{http_code}\")",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k,':',v\\) for k,v in d.get\\('exports',{}\\).items\\(\\)]\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k,':',v\\) for k,v in d.get\\('exports',{}\\).items\\(\\)]\")",
+      "Bash(mkdir -p '/Users/ayseral-mashat/Documents/Coding projects/Hawza/public/certs')",
+      "Bash(cp '/Users/ayseral-mashat/Downloads/certs/Ayatollah Sayed Nabil Shakir Talaqani.jpg' '/Users/ayseral-mashat/Documents/Coding projects/Hawza/public/certs/ayatollah-sayed-nabil-shakir-talaqani.jpg')",
+      "Bash(cp '/Users/ayseral-mashat/Downloads/certs/Ayatollah Sayed Saeed AlFayaz Hussaini.jpg' '/Users/ayseral-mashat/Documents/Coding projects/Hawza/public/certs/ayatollah-sayed-saeed-alfayaz-hussaini.jpg')",
+      "Bash(cp '/Users/ayseral-mashat/Downloads/certs/Ayatollah Sheikh Ahmad Moballighi.jpeg' '/Users/ayseral-mashat/Documents/Coding projects/Hawza/public/certs/ayatollah-sheikh-ahmad-moballighi.jpeg')",
+      "Bash(cp '/Users/ayseral-mashat/Downloads/certs/Ayatollah Sheikh Faisal AlAsadi.jpg' '/Users/ayseral-mashat/Documents/Coding projects/Hawza/public/certs/ayatollah-sheikh-faisal-alasadi.jpg')"
     ]
   }
 }
