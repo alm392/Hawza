@@ -193,10 +193,10 @@ function UploadPanel({ defaultWeek, defaultSubject, onUploaded }) {
 
       {uploadType === 'file' ? (
         <div className="portal-upload-field">
-          <label>File (PDF, Image, MP3, MP4, M4A, WAV, MOV)</label>
+          <label>File (PDF, Word Doc, Image, MP3, MP4, M4A, WAV, MOV)</label>
           <input
             type="file"
-            accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.mp3,.mp4,.m4a,.wav,.mov,.aac,.webm,.opus"
             onChange={(e) => setFile(e.target.files[0] || null)}
             required
           />
@@ -259,6 +259,7 @@ function FileRow({ f, isAdmin, onDeleted }) {
   }
 
   const icon = f.file_type === 'pdf' ? '📄'
+    : f.file_type === 'docx' ? '📝'
     : f.file_type === 'audio' ? '🎵'
     : f.file_type === 'image' ? '🖼️'
     : f.file_type === 'youtube' ? '▶️'
@@ -370,7 +371,7 @@ export default function StudentPortal({ isAdmin }) {
   const weeks = [...new Set([...DEFAULT_WEEKS, ...files.map((f) => f.lesson_number)])].sort((a, b) => a - b);
 
   const subjectFiles = files.filter((f) => f.lesson_number === activeWeek && f.subject === activeSubject);
-  const notes      = subjectFiles.filter((f) => f.file_type === 'pdf');
+  const notes      = subjectFiles.filter((f) => f.file_type === 'pdf' || f.file_type === 'docx');
   const images     = subjectFiles.filter((f) => f.file_type === 'image');
   const recordings = subjectFiles.filter((f) => f.file_type === 'audio' || f.file_type === 'video' || f.file_type === 'youtube');
 

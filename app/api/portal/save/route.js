@@ -43,6 +43,7 @@ export async function POST(request) {
     mimeType?.startsWith('audio/') ? 'audio'
     : mimeType?.startsWith('video/') ? 'video'
     : mimeType?.startsWith('image/') ? 'image'
+    : mimeType?.includes('word') || fileName?.match(/\.docx?$/i) ? 'docx'
     : 'pdf'
   );
 
