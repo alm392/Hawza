@@ -35,7 +35,7 @@ export default function Hero() {
 
         <div className="hero-badge">
           <span className="hero-badge-dot" />
-          In-Person Classes &nbsp;·&nbsp; Karen Rd, Tarneit, Melbourne
+          In-Person Classes &nbsp;·&nbsp; Tarneit &amp; Dandenong, Melbourne
         </div>
 
         <h1 className="hero-title">

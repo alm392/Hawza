@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: 'When does the program begin?',
-    a: 'All programs commence in the first week of May at our centre on Karen Rd, Tarneit. Enrollment is currently open, so we encourage you to register early to secure your place.',
+    a: 'All programs commence in the first week of May at our centres on Karen Rd, Tarneit and in Dandenong. Enrollment is currently open, so we encourage you to register early to secure your place.',
   },
   {
     q: 'Is the Hawza free?',

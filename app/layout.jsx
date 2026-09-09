@@ -26,7 +26,7 @@ const amiri = Amiri({
 export const metadata = {
   title: "Melbourne's Najaf Al Ashraf Accredited Hawza",
   description:
-    "Melbourne's Najaf Al-Ashraf accredited Islamic seminary. In-person classes in Tarneit with qualified scholars. Enroll now.",
+    "Melbourne's Najaf Al-Ashraf accredited Islamic seminary. In-person classes in Tarneit and Dandenong with qualified scholars. Enroll now.",
   icons: {
     icon: [
       { url: '/icon.png', type: 'image/png', sizes: '512x512' },

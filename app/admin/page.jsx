@@ -32,6 +32,7 @@ async function getEnrollments() {
         message    TEXT
       )
     `;
+    await sql`ALTER TABLE enrollments ADD COLUMN IF NOT EXISTS location TEXT`;
     const rows = await sql`SELECT * FROM enrollments ORDER BY timestamp ASC`;
     return rows;
   } catch (err) {

@@ -55,6 +55,7 @@ export default function AdminDashboard({ enrollments }) {
                   <th>Phone</th>
                   <th>Age</th>
                   <th>Gender</th>
+                  <th>Location</th>
                   <th>Programs</th>
                   <th>Message</th>
                 </tr>
@@ -79,6 +80,7 @@ export default function AdminDashboard({ enrollments }) {
                     </td>
                     <td>{e.age}</td>
                     <td>{e.gender}</td>
+                    <td>{e.location || <em style={{ opacity: 0.5 }}>—</em>}</td>
                     <td>
                       {(Array.isArray(e.programs) ? e.programs : [e.programs])
                         .filter(Boolean)

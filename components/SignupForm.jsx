@@ -17,6 +17,7 @@ export default function SignupForm() {
       phone:      fd.get('phone'),
       age:        fd.get('age'),
       gender:     fd.get('gender'),
+      location:   fd.get('location'),
       message:    fd.get('message'),
     };
     try {
@@ -90,6 +91,15 @@ export default function SignupForm() {
             <option value="Sister (Female)">Sister (Female)</option>
           </select>
         </div>
+      </div>
+
+      <div className="form-group full-width">
+        <label htmlFor="location">Which location are you enrolling in? *</label>
+        <select id="location" name="location" required defaultValue="">
+          <option value="" disabled>Select…</option>
+          <option value="Tarneit">Tarneit (Karen Rd)</option>
+          <option value="Dandenong">Dandenong</option>
+        </select>
       </div>
 
       <div className="form-group full-width">

@@ -19,8 +19,8 @@ const features = [
   },
   {
     icon: '📍',
-    title: 'Karen Rd, Tarneit',
-    desc: "Located in the heart of Melbourne's western community",
+    title: 'Tarneit & Dandenong',
+    desc: "Karen Rd, Tarneit and Dandenong, serving Melbourne's west and south-east",
   },
 ];
 
@@ -40,7 +40,7 @@ export default function About() {
             <div className="about-text">
               <p>
                 <strong>Idarah-e-Jafaria</strong> is honoured to announce
-                the commencement of Islamic Markaz activities in <strong>Tarneit, Melbourne</strong>,
+                the commencement of Islamic Markaz activities in <strong>Tarneit and Dandenong, Melbourne</strong>,
                 beginning the first week of May.
               </p>
               <p>

@@ -26,7 +26,7 @@ export default function Contact() {
                 <span className="contact-icon">📍</span>
                 <div>
                   <h4>Location</h4>
-                  <p>Karen Rd, Tarneit, Melbourne, VIC</p>
+                  <p>Karen Rd, Tarneit, Melbourne, VIC<br />Dandenong, Melbourne, VIC</p>
                 </div>
               </div>
               <div className="contact-item">

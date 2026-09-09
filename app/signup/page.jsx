@@ -39,7 +39,7 @@ export default function SignupPage() {
               <div className="form-info-bar">
                 <span>🗓</span>
                 <p style={{ margin: 0 }}>
-                  Classes are held at Karen Rd, Tarneit. All sessions are <strong>in-person</strong> with separate arrangements
+                  Classes are held at Karen Rd, Tarneit and in Dandenong. All sessions are <strong>in-person</strong> with separate arrangements
                   for brothers and sisters.
                 </p>
               </div>

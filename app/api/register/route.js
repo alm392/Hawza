@@ -14,18 +14,19 @@ async function ensureTable(sql) {
       message    TEXT
     )
   `;
+  await sql`ALTER TABLE enrollments ADD COLUMN IF NOT EXISTS location TEXT`;
 }
 
 export async function POST(request) {
   const body = await request.json();
-  const { first_name, last_name, email, phone, age, gender, message } = body;
+  const { first_name, last_name, email, phone, age, gender, message, location } = body;
 
   try {
     const sql = neon(process.env.DATABASE_URL);
     await ensureTable(sql);
     await sql`
-      INSERT INTO enrollments (first_name, last_name, email, phone, age, gender, message)
-      VALUES (${first_name || ''}, ${last_name || ''}, ${email || ''}, ${phone || ''}, ${age || ''}, ${gender || ''}, ${message || ''})
+      INSERT INTO enrollments (first_name, last_name, email, phone, age, gender, message, location)
+      VALUES (${first_name || ''}, ${last_name || ''}, ${email || ''}, ${phone || ''}, ${age || ''}, ${gender || ''}, ${message || ''}, ${location || ''})
     `;
     return Response.json({ ok: true });
   } catch (err) {

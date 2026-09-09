@@ -26,7 +26,7 @@ export default function Footer() {
             <h3>Idarah-e-Jafaria</h3>
             <p>
               Idarah E Jafaria<br />
-              Tarneit, Melbourne, VIC<br />
+              Tarneit &amp; Dandenong, Melbourne, VIC<br />
               Australia
             </p>
             <a href="mailto:idarahejafariaofmarjaiyah@gmail.com" className="footer-email">idarahejafariaofmarjaiyah@gmail.com</a>
@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>© 2025 Idarah-e-Jafaria &nbsp;|&nbsp; Melbourne Islamic Centre &nbsp;|&nbsp; Karen Rd, Tarneit</p>
+          <p>© 2025 Idarah-e-Jafaria &nbsp;|&nbsp; Melbourne Islamic Centre &nbsp;|&nbsp; Karen Rd, Tarneit &amp; Dandenong</p>
           <Link href="/admin" className="footer-admin-link">Admin Login</Link>
         </div>
       </div>
